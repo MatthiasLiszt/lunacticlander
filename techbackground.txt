@@ -1,0 +1,37 @@
+
+
+<h1>technical background to the moon landing</h1>
+
+Well, I think it should be worth to mention some physical or technical details to the moon landing.
+
+The moon has no notable atmosphere , so there's no aerobraking.
+
+The spaceship , probe or whatever has a limited amount of fuel.
+
+It is mentioned elsewhere that half of the mass of the moon landing module was fuel.
+Something around 8000 kg of fuel and the mass of the total module was 16000 kg. 
+
+For ease I will be using an exhaust velocity of 3200 m/s.
+
+The moon has a surface gravity of 1.62 m/ss and an escape velocity of 2380 m/s .
+
+In order to making the "simulation" or "game" not to boring I assume a maximal
+burning time of the engine of 100 seconds at full thrust.
+
+This means that at full or 100% thrust the engine consumes 80kg per second. 
+At 1% this will be a hundred times less or 0.8 kg .
+
+At 100% this results in a delta-v of 
+                        80 kg * 3200 m/s / current mass of spaceship.
+
+Assuming a mass of 16000 kg in the beginning this would make 16 m/s . 
+The mass of the spaceship is however constantly changing as the fuel is ejected.                     
+
+The simulation starts at a height of 100 000 m over the surface of the moon. 
+This means that without braking the spaceship will crash with around 569.2 m/s
+in around 351 seconds. 
+
+For safe landing a speed of less than 5 fps or 1.5 m/s is required. 
+
+
+
