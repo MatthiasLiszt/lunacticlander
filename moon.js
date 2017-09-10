@@ -2,7 +2,7 @@
 
 function moonControl(state,action){
  if(state === undefined)
-  {return {onoff: 'off', height: 100000, speed: 0, thrust: 0, fuel: 8000}; }
+  {return {onoff: 'off', height: 30000, speed: 0, thrust: 0, fuel: 8000}; }
  switch(action.type){
    case 'onoff': return onoffAction(state);
    case 'fireplus': return fireplusAction(state);
@@ -28,7 +28,7 @@ var ctx=monitor.getContext("2d");
 
 function drawSpaceship(x){
 
- var h=Math.round(((100000-x.height)/100000)*300/3);
+ var h=Math.round(((30000-x.height)/30000)*300/3);
  var size=6;
 
  //ctx.clearRect(0, 0, monitor.width, monitor.height);
