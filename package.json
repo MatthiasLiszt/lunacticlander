@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dmachat/redux-ui-router-sample.git"
+    "url": "git+https://github.com/MatthiasLiszt/lunacticlander.git"
   },
   "keywords": [
     "redux",
@@ -18,12 +18,12 @@
     "angular",
     "ngRedux"
   ],
-  "author": "Drew Machat",
+  "author": "Matthias Liszt",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dmachat/redux-ui-router-sample/issues"
+    "url": "https://github.com/MatthiasLiszt/lunacticlander/issues"
   },
-  "homepage": "https://github.com/dmachat/redux-ui-router-sample#readme",
+  
   "devDependencies": {
     "babel-core": "^6.0.20",
     "babel-loader": "^6.0.1",
