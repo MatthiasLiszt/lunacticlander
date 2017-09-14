@@ -6,7 +6,7 @@ Welcome to the Lunatic Lander - Repo
 The purpose of this repo is to demonstrate redux.js and ngredux . 
 
 There is a vanilla js implementation which can simple be run by loading
-__ moonprovisoric.html___ . 
+__moonprovisoric.html__ . 
 
 However for the AngularJS version you have to check that your node and 
 npm are not too old and then you have to run and install the whole thing
