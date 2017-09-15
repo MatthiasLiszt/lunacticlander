@@ -29,4 +29,9 @@ There will be a codepen version out soon, an interesting article on my
 <a href="http://coding4lifeblog.wordpress.com/">blog</a> and hopefully 
 a presentation with slides which I plan to contribute to my local FCC group. 
 
+# Solution
+
+Okay, I could not sleep at night and so added a program which calculates the 
+solution. See the results by loading __autopilot.html__ in your browser. 
+
 Have fun ! 

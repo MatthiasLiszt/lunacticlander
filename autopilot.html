@@ -1,0 +1,38 @@
+<html>
+<title>autopilot for lunar lander </title>
+<body>
+<script>
+var speed=0, moongravity=1.62, height=30000;
+var thrust=0, fuel=8000, spacecraft=8000;
+var escapeVelocity=3200;
+
+var FALL=175;
+var i,j;
+
+for(j=FALL;j>0;j-=0.1)
+{
+for(i=0;i<1000;++i)
+ {initvalues(j);
+  thrust=i;
+  while(height>0)
+   {speed+=moongravity;
+    if(fuel>=(thrust*0.08))
+     {fuel-=(thrust*0.08);
+      speed-=((thrust*0.08)*escapeVelocity/(spacecraft+fuel)); 
+     }   
+    height-=speed;
+   }  
+  if(speed<1.5)
+   {document.write("<p>"+speed+" m/s "+thrust/10+" % thrust "+"falltime "+j+" s "+fuel+" kg left</p>");}  
+  
+ }
+}
+
+function initvalues(falltime) 
+ {speed=moongravity*falltime;
+  height=(30000-(moongravity*falltime*falltime))*0.5;
+  fuel=8000;
+ } 
+</script>
+</body>
+</html>
