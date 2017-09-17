@@ -1,6 +1,7 @@
 <html>
 <title>autopilot for lunar lander </title>
 <body>
+<div id="calcstatus">wait a little ! values getting calculated</div>
 <h1>just falling and braking</h1> 
 <div id="fallbrake"></div>
 <h1>in/decreasing thrust while braking</h1>
@@ -14,41 +15,48 @@ var FALL=136;
 var minFALL=89;
 var minTHRUST=36;
 var maxTHRUST=81;
-var i,j;
 var fallbrake=document.getElementById("fallbrake");
 var thrustchange=document.getElementById("thrustchange");
 
+if(typeof(Worker)!=="undefined")
+ {console.log("WebWorkers supported");}
+else
+ {alert("your browser doesn't support WebWorkers !");}
 
-for(j=FALL;j>minFALL;j-=0.1)
-{
-for(i=minTHRUST*10;i<maxTHRUST*10;++i)
- {initvalues(j);
-  thrust=i;
-  while(height>0)
-   {speed+=moongravity;
-    if(fuel>=(thrust*0.08))
-     {fuel-=(thrust*0.08);
-      speed-=((thrust*0.08)*escapeVelocity/(spacecraft+fuel)); 
+function calcFallBrake(x){
+ var j=x,i;
+ //for(j=FALL;j>minFALL;j-=0.1)
+ if(j>minFALL)
+   {
+    for(i=minTHRUST*10;i<maxTHRUST*10;++i)
+      {initvalues(j);
+       thrust=i;
+       while(height>0)
+        {speed+=moongravity;
+         if(fuel>=(thrust*0.08))
+          {fuel-=(thrust*0.08);
+           speed-=((thrust*0.08)*escapeVelocity/(spacecraft+fuel)); 
+          }
+         else{thrust=0;}   
+         height-=speed;
+        }  
+       speed=Math.round(speed*100)/100;
+       fuel=Math.round(fuel*100)/100;
+       var f=Math.round(j*10)/10;
+       var usedfuel=Math.round((8000-fuel)*10)/10;
+       var xx="<p>"+speed+" m/s "+thrust/10+" % thrust "+f;
+       var xxx=" s falltime "+usedfuel+" kg used</p>";
+       //console.log(xx+xxx);
+       if(speed<moongravity)
+        {fallbrake.innerHTML+=xx+xxx;}  
+       
      }
-    else{thrust=0;}   
-    height-=speed;
-   }  
-  if(speed<moongravity)
-   {speed=Math.round(speed*100)/100;
-    fuel=Math.round(fuel*100)/100;
-    var f=Math.round(j*10)/10;
-    var usedfuel=Math.round((8000-fuel)*10)/10;
-    var xx="<p>"+speed+" m/s "+thrust/10+" % thrust "+f;
-    var xxx=" s falltime "+usedfuel+" kg used</p>";
-    fallbrake.innerHTML+=xx+xxx;
-   }  
-  
- }
+  } 
 }
 
 
-function initvalues(falltime) 
- {speed=moongravity*falltime;
+function initvalues(falltime){ 
+  speed=moongravity*falltime;
   height=(30000-(moongravity*falltime*falltime))*0.5;
   fuel=8000;
   thrust=0;
@@ -58,36 +66,86 @@ var increasing=true;
 var MAXTHRUST=56;
 var TRATE=1.5;
 
-for(j=FALL;j>minFALL;j-=0.1)
- {for(i=0;i<MAXTHRUST;i+=TRATE)
-   {initvalues(j);
-    increasing=true;
-    while(height>0)
-     {speed+=moongravity;
-      if(increasing){thrust+=TRATE;}
-       else{thrust-=TRATE;}
-      if(thrust>i){increasing=false;}
-      if(thrust<0){thrust=0;}
-      if(fuel>=(thrust*0.8))
-       {fuel-=(thrust*0.8);
-        speed-=((thrust*0.8)*escapeVelocity/(spacecraft+fuel)); 
-       }
-      else{thrust=0;}
-      height-=speed;  
-     }
-    if((speed<moongravity)&&(speed>-moongravity))
-     {speed=Math.round(speed*1000)/1000;
-      fuel=Math.round(fuel*100)/100;
-      var f=Math.round(j*1000)/1000;
-      var usedfuel=Math.round((8000-fuel)*100)/100;
-      var xx="<p>"+speed+" m/s "+i+" % max. thrust "+f+" s falltime ";
-      var xxx=usedfuel+" kg fuel used ";  
-      var xy="( "+TRATE+" % thrust change rate per s )</p>";
-      thrustchange.innerHTML+=xx+xxx+xy;
-      console.log(xx+xxx);
-     }
+function calcInDecrease(x){
+ var j=x,i;
+ //for(j=FALL;j>minFALL;j-=0.1)
+ if(j>minFALL)
+  {for(i=0;i<MAXTHRUST;i+=TRATE)
+    {initvalues(j);
+     increasing=true;
+     while(height>0)
+      {speed+=moongravity;
+       if(increasing){thrust+=TRATE;}
+        else{thrust-=TRATE;}
+       if(thrust>i){increasing=false;}
+       if(thrust<0){thrust=0;}
+       if(fuel>=(thrust*0.8))
+        {fuel-=(thrust*0.8);
+         speed-=((thrust*0.8)*escapeVelocity/(spacecraft+fuel)); 
+        }
+       else{thrust=0;}
+       height-=speed;  
+      }
+     if((speed<moongravity)&&(speed>-moongravity))
+      {speed=Math.round(speed*1000)/1000;
+       fuel=Math.round(fuel*100)/100;
+       var f=Math.round(j*1000)/1000;
+       var usedfuel=Math.round((8000-fuel)*100)/100;
+       var xx="<p>"+speed+" m/s "+i+" % max. thrust "+f+" s falltime ";
+       var xxx=usedfuel+" kg fuel used ";  
+       var xy="( "+TRATE+" % thrust change rate per s )</p>";
+       thrustchange.innerHTML+=xx+xxx+xy;
+       console.log(xx+xxx);
+      }
+    }
+  }
+}
+
+var FallBrakeParameter=FALL,inDecreaseParameter=FALL;
+var fallBrakeCompleted=false,inDecreaseCompleted=false;
+
+function fallBrakeCall(){
+ if(FallBrakeParameter>minFALL)
+   {calcFallBrake(FallBrakeParameter);
+    FallBrakeParameter-=0.1;
+    console.log("fallBrakeCall "+FallBrakeParameter);
    }
+  else
+   {if(!fallBrakeCompleted)
+     {console.log("fallbrake values calculated !!!");}
+    fallBrakeCompleted=true;
+   }  
  }
+
+setInterval(fallBrakeCall,10);
+
+function inDecreaseCall(){
+ if(inDecreaseParameter>minFALL)
+  {calcInDecrease(inDecreaseParameter);
+   inDecreaseParameter-=0.1;
+   console.log("inDecreaseCall "+inDecreaseParameter);
+  }
+ else
+  {if(!inDecreaseCompleted)
+    {console.log("inDecrease values calculated !!!");}
+   inDecreaseCompleted=true;
+  }
+}
+
+setInterval(inDecreaseCall,11);
+
+function isAllCalculated(){
+ var x;
+ if(fallBrakeCompleted&&inDecreaseCompleted)
+  {var x=document.getElementById("calcstatus");
+   x.innerHTML="all calculations are done !";
+   console.log("all calculations are done !");
+  }
+ else
+  {console.log("still calculating");}
+}
+
+setInterval(isAllCalculated,2000);
 
 </script>
 </body>
